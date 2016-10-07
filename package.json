@@ -1,0 +1,23 @@
+{
+  "name": "ezcli",
+  "version": "1.0.0",
+  "description": "Easily create multi-command CLI apps (similar to git)",
+  "main": "index.js",
+  "keywords": [
+    "ez",
+    "easy",
+    "simple",
+    "cli",
+    "command",
+    "commander"
+  ],
+  "author": "Phillip Gibson <gibson.phillip.j@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renolc/ezcli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/renolc/ezcli/issues"
+  }
+}
