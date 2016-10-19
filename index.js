@@ -1,17 +1,13 @@
-const fs = require('fs')
 const log = console.log
 
 const commands = []
-let defaultCommand
 
 const printUsage = (name) => {
   log()
   log(`  Usage: ${name} <command>`)
   log()
   log('  Commands:')
-  for(let cmd of commands) {
-    log(`    ${cmd.name}${cmd.args.length ? ` ${cmd.args.join(' ')}` : ''}`)
-  }
+  commands.forEach((cmd) => log(`    ${cmd.name}${cmd.args.length ? ` ${cmd.args.join(' ')}` : ''}`))
   log()
 }
 
@@ -59,7 +55,7 @@ module.exports = (cli) => ({
 
   process: function () {
     if (process.argv.length < 3) {
-      return (defaultCommand) ? defaultCommand() : printUsage(cli)
+      return printUsage(cli)
     }
 
     runCommand(cli, process.argv[2], process.argv.slice(3))
