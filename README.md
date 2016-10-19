@@ -24,7 +24,7 @@ npm i ezcli -S
 #### app.js
 
 ```js
-#!/bin/usr/env node
+#!/usr/bin/env node
 const cli = require('ezcli')
 
 cli('cli-app')
@@ -43,7 +43,7 @@ cli('cli-app')
 ### API
 
 ```js
-#!/bin/usr/env node
+#!/usr/bin/env node
 const cli = require('ezcli')
 
 // declare the cli app name
