@@ -2,12 +2,12 @@ const log = console.log
 
 const commands = []
 
-const printUsage = (name) => {
+const printUsage = (cli) => {
   log()
-  log(`  Usage: ${name} <command>`)
+  log(`  Usage: ${cli} <command>`)
   log()
   log('  Commands:')
-  commands.forEach((cmd) => log(`    ${cmd.name}${cmd.args.length ? ` ${cmd.args.join(' ')}` : ''}`))
+  commands.forEach((cmd) => log(`    ${cmd.name} ${cmd.args.join(' ')}`.trimRight()))
   log()
 }
 
@@ -22,7 +22,7 @@ const runCommand = (cli, cmd, args) => {
 
   if (!command) return printUsage(cli)
 
-  if (args.length >= command.requiredArgs.length) command.fn.apply(this, args)
+  if (args.length >= command.requiredArgs.length) command.fn.apply(null, args)
   else printUsageForCommand(cli, command)
 }
 
