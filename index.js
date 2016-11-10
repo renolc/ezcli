@@ -4,7 +4,7 @@ const log = console.log
 
 const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', '..', 'package.json'), { encoding: 'utf8' })).version
 
-const commands = []
+const commands = {}
 
 const printUsage = (cli) => {
   log()
@@ -13,28 +13,30 @@ const printUsage = (cli) => {
   log(`  Usage: ${cli} <command>`)
   log()
   log('  Commands:')
-  commands.forEach((cmd) => log(`    ${cmd.name} ${cmd.args.join(' ')}`.trimRight()))
+  for (let cmd in commands) {
+    log(`    ${cmd} ${commands[cmd].args}`)
+  }
   log()
 }
 
 const printUsageForCommand = (cli, cmd) => {
   log()
-  log(`  Usage: ${cli} ${cmd.name} ${cmd.args.join(' ')}`)
+  log(`  Usage: ${cli} ${cmd} ${commands[cmd].args}`)
   log()
 }
 
 const runCommand = (cli, cmd, args) => {
-  const command = commands.find((i) => i.name === cmd)
+  const command = commands[cmd]
 
   if (!command) return printUsage(cli)
 
-  if (args.length >= command.requiredArgs.length) command.fn.apply(null, args)
-  else printUsageForCommand(cli, command)
+  if (args.length >= command.requiredArgsCount) command.fn.apply(null, args)
+  else printUsageForCommand(cli, cmd)
 }
 
 module.exports = (cli) => ({
   command: function (name, fn) {
-    if (commands.find((i) => i.name === name)) throw new Error(`Cannot declare duplicate commands: ${name}`)
+    if (commands[name]) throw new Error(`Cannot declare duplicate commands: ${name}`)
 
     const cmdString = fn.toString()
     const args = cmdString
@@ -49,12 +51,11 @@ module.exports = (cli) => ({
         throw new Error(`Optional arguments must be declared at the end of the function: ${name} ${args.join(' ')}`)
     }
 
-    commands.push({
-      name,
-      args,
-      requiredArgs: args.filter((i) => i.startsWith('<')),
+    commands[name] = {
+      args: args.join(' '),
+      requiredArgsCount: args.filter((i) => i.startsWith('<')).length,
       fn
-    })
+    }
 
     return this
   },
