@@ -25,15 +25,6 @@ const printUsageForCommand = (cli, cmd) => {
   log()
 }
 
-const runCommand = (cli, cmd, args) => {
-  const command = commands[cmd]
-
-  if (!command) return printUsage(cli)
-
-  if (args.length >= command.requiredArgsCount) command.fn.apply(null, args)
-  else printUsageForCommand(cli, cmd)
-}
-
 module.exports = (cli) => ({
   command: function (name, fn) {
     if (commands[name]) throw new Error(`Cannot declare duplicate commands: ${name}`)
@@ -65,6 +56,13 @@ module.exports = (cli) => ({
       return printUsage(cli)
     }
 
-    runCommand(cli, process.argv[2], process.argv.slice(3))
+    const cmd = process.argv[2]
+    const args = process.argv.slice(3)
+    const command = commands[cmd]
+
+    if (!command) return printUsage(cli)
+
+    if (args.length >= command.requiredArgsCount) command.fn.apply(null, args)
+    else printUsageForCommand(cli, cmd)
   }
 })
