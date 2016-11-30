@@ -26,7 +26,7 @@ const printUsageForCommand = (cli, cmd) => {
 }
 
 module.exports = (cli) => ({
-  command: function (name, fn) {
+  command(name, fn) {
     if (commands[name]) throw new Error(`Cannot declare duplicate commands: ${name}`)
 
     const cmdString = fn.toString()
@@ -51,7 +51,7 @@ module.exports = (cli) => ({
     return this
   },
 
-  process: function () {
+  process() {
     if (process.argv.length < 3) {
       return printUsage(cli)
     }
