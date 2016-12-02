@@ -17,6 +17,7 @@ npm i ezcli -S
 ```json
 {
   "name": "cli-app",
+  "version": "1.0.0",
   "bin": "./app.js"
 }
 ````
@@ -40,65 +41,70 @@ cli('cli-app')
   .process()
 ```
 
-### API
-
-```js
-#!/usr/bin/env node
-const cli = require('ezcli')
-
-// declare the cli app name
-// this should be the actual command you run in the terminal, ie `cliName <command>`
-cli('cliName')
-
-  // this block declares a command that would used via `cliName commandName`
-  // upon execution the provided function is run
-  // command names must be unique
-  .command('commandName', () => {
-    console.log('in commandName')
-  })
-
-  // if function contains arguments, they will become part of the required command signature
-  // ie, `cliName withArgs <arg>`
-  .command('withArgs', (arg) => {
-    console.log('in withArgs', arg)
-  })
-
-  // optional arguments can be defined at the end of the function
-  // these are not required during execution
-  // ie `cliName optionalArgs` or `cliName optionalArgs [param]`
-  .command('optionalArgs', (optional = 'default') => {
-    console.log('in optionalArgs', optional)
-  })
-
-  // this enables the cli app to process the arguments passed to it
-  .process()
-```
-
-The above defined CLI app would work like so:
+#### Resulting app
 
 ```
-~ $ cliName
+~ $ cli-app
 
-  Usage: cliName <command>
+  v1.0.0
+
+  Usage: cli-app <command>
 
   Commands:
-    commandName
-    withArgs <arg>
-    optionalArgs [optional = 'default']
+    subcommand
+    commandWithArg <arg>
+    optionalParams <required> [optional = 'default']
 
-~ $ cliName commandName
-in commandName
+~ $ cli-app subcommand
+in subcommand
 
-~ $ cliName withArgs
+~ $ cli-app commandWithArg
 
-  Usage: cliName withArgs <arg>
+  Usage: cli-app commandWithArg <arg>
 
-~ $ cliName withArgs test
-in withArgs test
+~ $ cli-app commandWithArg test
+commandWithArgs: test
 
-~ $ cliName optionalArgs
-in optionalArgs default
+~ $ cli-app optionalParams
 
-~ $ cliName optionalArgs bork
-in optionalArgs bork
+  Usage: cli-app optionalParams <required> [optional = 'default']
+
+~ $ cli-app optionalParams abc
+optionalParams: abc default
+
+~ $ cli-app optionalParams abc 123
+optionalParams: abc 123
 ```
+
+### API
+
+#### `cli(<name>)`
+
+Declare the cli app with the given `name` (string). The name should match the defined binary name in your `package.json` ([more info](https://docs.npmjs.com/files/package.json#bin))
+
+#### `command(name, fn)`
+
+Define a subcommand. `name` (string) should be unique and should contain no whitespace. `fn` (function) will be executed when this subcommand is invoked.
+
+Any parameters defined on `fn` will become part of the command signature. E.g., `command('test', (thing) => {})` will produce the signature `test <thing>`.
+
+Optional parameters are acceptible, but only at the end of the parameter list. E.g., `command('test', (a, b='default') => {})` will produce `test <a> [b='default']`.
+
+**All** parameters must be wrapped in parentheses. While `param => {}` is valid ES6, it will not produce correct command signatures. Instead, use `(param) => {}`.
+
+`command` will return `this`, making it chainable. So you can add several commands in sequence.
+
+#### `process()`
+
+`process` is used to indicate the end of your cli app definition. Once it is invoked, it will beging processing any command line arguments passed in to your cli app, and will execute the correct subcommand or print usage information.
+
+### Assumptions and Considerations
+
+`ezcli` assumes there is a `version` defined in your `package.json`. It will automatically use this as part of your app usage message.
+
+`ezcli` will work on any node version >= 0.10.0, but certain features require greater minimum versions:
+
+- arrow functions (`() => {}`) require node >= 4.0.0
+- default parameters (`(test = 'default') => {}`) require node >= 6.0.0
+
+If you use either of these features, it is recommended that you set the required minimum node version within your `package.json` ([more info](https://docs.npmjs.com/files/package.json#engines))
