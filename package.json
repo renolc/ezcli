@@ -3,6 +3,9 @@
   "version": "1.1.2",
   "description": "Easily create multi-command CLI apps (similar to git)",
   "main": "index.js",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
   "keywords": [
     "ez",
     "easy",
