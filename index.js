@@ -55,10 +55,6 @@ module.exports = function (cli) {
     },
 
     process: function () {
-      if (process.argv.length < 3) {
-        return printUsage(cli)
-      }
-
       const cmd = process.argv[2]
       const args = process.argv.slice(3)
       const command = commands[cmd]
