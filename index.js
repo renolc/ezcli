@@ -28,6 +28,7 @@ const printUsageForCommand = function (cli, cmd) {
 module.exports = function (cli) {
   return {
     command: function (name, fn) {
+      if (name.match(/\s/)) throw new Error('Command names cannot contain white space: '+name)
       if (commands[name]) throw new Error('Cannot declare duplicate commands: '+name)
 
       const cmdString = fn.toString()
