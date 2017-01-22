@@ -32,7 +32,7 @@ cli('cli-app')
   .command('subcommand', () => {
     console.log('in subcommand')
   })
-  .command('commandWithArg', (arg) => {
+  .command('commandWithArg', arg => {
     console.log(`commandWithArgs: ${arg}`)
   })
   .command('optionalParams', (required, optional = 'default') => {
@@ -78,25 +78,23 @@ optionalParams: abc 123
 
 ### API
 
-#### `cli(<name>)`
+#### `cli(name:string)`
 
-Declare the cli app with the given `name` (string). The name should match the defined binary name in your `package.json` ([more info](https://docs.npmjs.com/files/package.json#bin))
+Declare the cli app with the given `name`. The name should match the defined binary name in your `package.json` ([more info](https://docs.npmjs.com/files/package.json#bin)).
 
-#### `command(name, fn)`
+#### `command(name:string, fn:function)`
 
-Define a subcommand. `name` (string) should be unique and should contain no whitespace. `fn` (function) will be executed when this subcommand is invoked.
+Define a subcommand with a given `name`. Names should be unique and should contain no whitespace. `fn` will be executed when this subcommand is invoked.
 
-Any parameters defined on `fn` will become part of the command signature. E.g., `command('test', (thing) => {})` will produce the signature `test <thing>`.
+Any parameters defined in `fn` will become part of the command signature. E.g., `command('test', thing => {})` will produce the signature `test <thing>`.
 
 Optional parameters are acceptible, but only at the end of the parameter list. E.g., `command('test', (a, b='default') => {})` will produce `test <a> [b='default']`.
 
-**All** parameters must be wrapped in parentheses. While `param => {}` is valid ES6, it will not produce correct command signatures. Instead, use `(param) => {}`.
-
-`command` will return `this`, making it chainable. So you can add several commands in sequence.
+`command` is chainable, so you may add several commands in sequence.
 
 #### `process()`
 
-`process` is used to indicate the end of your cli app definition. Once it is invoked, it will beging processing any command line arguments passed in to your cli app, and will execute the correct subcommand or print usage information.
+`process` is used to indicate the end of your cli app definition. Once it is called, it will beging processing any command line arguments passed in to your cli app, and will execute the correct subcommand or print usage information.
 
 ### Assumptions and Considerations
 

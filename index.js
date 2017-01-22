@@ -34,8 +34,12 @@ module.exports = function (cli) {
       const cmdString = fn.toString()
 
       const args = cmdString
-        .substring(cmdString.indexOf('(') + 1, cmdString.indexOf(')'))
+        .split('=>')[0]
+        .split('(')
+        .slice(-1)[0]
+        .split(')')[0]
         .split(',')
+        .filter(function (i) { return i })
         .map(function (i) {
           const trimmed = i.trim()
           return ~i.indexOf('=') ? '['+trimmed+']' : '<'+trimmed+'>'
