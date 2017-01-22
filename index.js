@@ -29,16 +29,17 @@ module.exports = function (cli) {
   return {
     command: function (name, fn) {
       if (name.match(/\s/)) throw new Error('Command names cannot contain white space: '+name)
-      if (commands[name]) throw new Error('Cannot declare duplicate commands: '+name)
+      if (commands[name]) throw new Error('Command names must be unique: '+name)
 
       const cmdString = fn.toString()
 
       const args = cmdString
         .substring(cmdString.indexOf('(') + 1, cmdString.indexOf(')'))
         .split(',')
-        .map(function (i) { return i.trim() })
-        .filter(function (i) { return i })
-        .map(function (i) { return ~i.indexOf('=') ? '['+i+']' : '<'+i+'>' })
+        .map(function (i) {
+          const trimmed = i.trim()
+          return ~i.indexOf('=') ? '['+trimmed+']' : '<'+trimmed+'>'
+        })
 
       for (var i = 1; i < args.length; i++) {
         if (args[i][0] === '<' && args[i-1][0] === '[')
