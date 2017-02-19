@@ -100,9 +100,4 @@ Optional parameters are acceptible, but only at the end of the parameter list. E
 
 `ezcli` assumes there is a `version` defined in your `package.json`. It will automatically use this as part of your app usage message.
 
-`ezcli` will work on any node version >= 0.10.0, but certain features require greater minimum versions:
-
-- arrow functions (`() => {}`) require node >= 4.0.0
-- default parameters (`(test = 'default') => {}`) require node >= 6.0.0
-
-If you use either of these features, it is recommended that you set the required minimum node version within your `package.json` ([more info](https://docs.npmjs.com/files/package.json#engines))
+`ezcli` requires node version >= 6.0.0. It is recommended that you set the required minimum node version within your `package.json` ([more info](https://docs.npmjs.com/files/package.json#engines))
