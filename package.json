@@ -1,6 +1,6 @@
 {
   "name": "ezcli",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Easily create multi-command CLI apps (similar to git)",
   "main": "index.js",
   "engines": {
