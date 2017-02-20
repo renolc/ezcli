@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const getParams = require('get-function-params')
 const log = console.log
 
 const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', '..', 'package.json'), { encoding: 'utf8' })).version
@@ -28,17 +29,8 @@ module.exports = (cli) => ({
     if (name.match(/\s/)) throw new Error(`Command names cannot contain white space: ${name}`)
     if (commands[name]) throw new Error(`Command names must be unique: ${name}`)
 
-    const cmdString = fn.toString()
-
-    const args = cmdString
-      .split('=>')[0]
-      .split('(')
-      .slice(-1)[0]
-      .split(')')[0]
-      .split(',')
-      .map((i) => i.trim())
-      .filter((i) => i)
-      .map((i) => i.includes('=') ? `[${i}]` : `<${i}>`)
+    const args = getParams(fn)
+      .map((i) => i.default ? `[${i.param} = ${i.default}]` : `<${i.param}>`)
 
     for (var i = 1; i < args.length; i++) {
       if (args[i].startsWith('<') && args[i-1].startsWith('['))

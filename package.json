@@ -22,5 +22,8 @@
   },
   "bugs": {
     "url": "https://github.com/renolc/ezcli/issues"
+  },
+  "dependencies": {
+    "get-function-params": "^1.0.0"
   }
 }
