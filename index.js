@@ -30,7 +30,7 @@ module.exports = (cli) => ({
     if (commands[name]) throw new Error(`Command names must be unique: ${name}`)
 
     const args = getParams(fn)
-      .map((i) => i.default ? `[${i.param} = ${i.default}]` : `<${i.param}>`)
+      .map((i) => (typeof i.default !== 'undefined') ? `[${i.param} = ${i.default}]` : `<${i.param}>`)
 
     for (var i = 1; i < args.length; i++) {
       if (args[i].startsWith('<') && args[i-1].startsWith('['))
