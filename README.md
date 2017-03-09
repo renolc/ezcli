@@ -32,7 +32,7 @@ cli('cli-app')
   .command('subcommand', () => {
     console.log('in subcommand')
   })
-  .command('commandWithArg', arg => {
+  .command('commandWithArg', (arg) => {
     console.log(`commandWithArgs: ${arg}`)
   })
   .command('optionalParams', (required, optional = 'default') => {
@@ -86,7 +86,7 @@ Declare the cli app with the given `name`. The name should match the defined bin
 
 Define a subcommand with a given `name`. Names should be unique and should contain no whitespace. `fn` will be executed when this subcommand is invoked.
 
-Any parameters defined in `fn` will become part of the command signature. E.g., `command('test', thing => {})` will produce the signature `test <thing>`.
+Any parameters defined in `fn` will become part of the command signature. E.g., `command('test', (thing) => {})` will produce the signature `test <thing>`.
 
 Optional parameters are acceptible, but only at the end of the parameter list. E.g., `command('test', (a, b='default') => {})` will produce `test <a> [b='default']`.
 
