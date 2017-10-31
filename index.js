@@ -1,33 +1,16 @@
 const path = require('path')
 const fs = require('fs')
 const getParams = require('get-function-params')
-const log = console.log
 
-const version = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', '..', 'package.json'), { encoding: 'utf8' })).version
-
-const commands = {}
-
-const printUsage = (cli) => {
-  log()
-  log(`  v${version}`)
-  log()
-  log(`  Usage: ${cli} <command>`)
-  log()
-  log('  Commands:')
-  Object.keys(commands).forEach((cmd) => log(`    ${cmd} ${commands[cmd].args}`))
-  log()
-}
-
-const printUsageForCommand = (cli, cmd) => {
-  log()
-  log(`  Usage: ${cli} ${cmd} ${commands[cmd].args}`)
-  log()
-}
+const printUsage = require('./src/print-usage')
+const printCommandUsage = require('./src/print-command-usage')
 
 module.exports = (cli) => ({
+  commands: {},
+
   command (name, fn) {
     if (name.match(/\s/)) throw new Error(`Command names cannot contain white space: ${name}`)
-    if (commands[name]) throw new Error(`Command names must be unique: ${name}`)
+    if (this.commands[name]) throw new Error(`Command names must be unique: ${name}`)
 
     const args = getParams(fn)
       .map((i) => (i.default) ? `[${i.param} = ${i.default}]` : `<${i.param}>`)
@@ -37,7 +20,7 @@ module.exports = (cli) => ({
         throw new Error(`Optional arguments must be declared at the end of the function: ${name} ${args.join(' ')}`)
     }
 
-    commands[name] = {
+    this.commands[name] = {
       args: args.join(' '),
       requiredArgsCount: args.filter(i => i.startsWith('<')).length,
       fn
@@ -48,11 +31,16 @@ module.exports = (cli) => ({
 
   process () {
     const [ cmd, ...args ] = process.argv.slice(2)
-    const command = commands[cmd]
+    const command = this.commands[cmd]
 
-    if (!command) return printUsage(cli)
+    const version = JSON.parse(fs.readFileSync(
+      path.resolve(__dirname, '..', '..', 'package.json'),
+      { encoding: 'utf8' }
+    )).version
+
+    if (!command) return printUsage(cli, this.commands, version)
 
     if (args.length >= command.requiredArgsCount) command.fn.apply(null, args)
-    else printUsageForCommand(cli, cmd)
+    else printCommandUsage(cli, cmd, this.commands)
   }
 })
