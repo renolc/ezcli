@@ -1,7 +1,7 @@
 const log = console.log
 
 module.exports = (cli, commands, version) => {
-  if (typeof version != null) {
+  if (version !== false) {
     log()
     log(`  v${version}`)
   }
