@@ -1,12 +1,14 @@
 const log = console.log
 
 module.exports = (cli, commands, version) => {
-  log()
-  log(`  v${version}`)
+  if (typeof version != null) {
+    log()
+    log(`  v${version}`)
+  }
   log()
   log(`  Usage: ${cli} <command>`)
   log()
   log('  Commands:')
-  Object.keys(commands).forEach((cmd) => log(`    ${cmd} ${commands[cmd].args}`))
+  Object.keys(commands).forEach(cmd => log(`    ${cmd} ${commands[cmd].args}`))
   log()
 }
