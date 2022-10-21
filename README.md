@@ -32,7 +32,7 @@ cli('cli-app')
   .command('subcommand', () => {
     console.log('in subcommand')
   })
-  .command('commandWithArg', (arg) => {
+  .command('commandWithArg', arg => {
     console.log(`commandWithArgs: ${arg}`)
   })
   .command('optionalParams', (required, optional = 'default') => {
