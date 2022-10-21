@@ -94,7 +94,7 @@ Optional parameters are acceptible, but only at the end of the parameter list. E
 
 #### `process()`
 
-`process` is used to indicate the end of your cli app definition. Once it is called, it will beging processing any command line arguments passed in to your cli app, and will execute the correct subcommand or print usage information.
+`process` is used to indicate the end of your cli app definition. Once it is called, it will begin processing any command line arguments passed in to your cli app, and will execute the correct subcommand or print usage information.
 
 ### Assumptions and Considerations
 
