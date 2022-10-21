@@ -20,7 +20,7 @@ npm i ezcli -S
   "version": "1.0.0",
   "bin": "./app.js"
 }
-````
+```
 
 #### app.js
 
